@@ -25,7 +25,8 @@ GatherBuddy 可以用物品名稱查詢採集點與魚的位置、顯示限時�
 2. **不依賴英文表格**（`GatherBuddy/FishTimer/FishRecorder.Record.cs`、`GatherBuddy.GameData/GameData.cs`）：讀不到英文表格時改用預設值或用戶端語言，避免載入失敗。
 3. **釣魚聊天訊息**（`GatherBuddy/FishTimer/Parser/FishingParser.Regexes.cs`）：新增繁中的拋竿、未知釣場、發現新釣場、以小釣大訊息比對規則。
 4. **特徵碼容錯**（`GatherBuddy/SeFunctions/SeAddressBase.cs`、`SeFunctionBase.cs`、`CurrentBait.cs`、`CurrentWeather.cs`）：找不到特徵碼時只停用該功能並記錄錯誤，不會讓整個插件載入失敗。
-5. 插件顯示名稱改為 `GatherBuddy (TW)`，`InternalName` 維持 `GatherBuddy`，原有設定不會遺失。
+5. **插件圖示**（`GatherBuddy/GatherBuddy.csproj`）：編譯時把原版的 `images/icon.png` 複製到 DLL 旁，開發插件才會顯示圖示。
+6. 插件顯示名稱改為 `GatherBuddy (TW)`，`InternalName` 維持 `GatherBuddy`，原有設定不會遺失。
 
 ## 台服已確認可用
 
