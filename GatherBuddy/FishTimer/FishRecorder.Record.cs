@@ -115,15 +115,23 @@ public partial class FishRecorder
         LureTimer.Stop();
     }
 
-    private static readonly uint GatheringIdx =
-        Dalamud.GameData.GetExcelSheet<BaseParam>(ClientLanguage.English).Cast<BaseParam?>()
-            .FirstOrDefault(r => r!.Value.Name == "Gathering")?.RowId
-     ?? 72;
+    // TW: the Taiwan client may not ship English sheets, so fall back to the known row ids.
+    private static uint FindBaseParam(string name, uint fallback)
+    {
+        try
+        {
+            return Dalamud.GameData.GetExcelSheet<BaseParam>(ClientLanguage.English).Cast<BaseParam?>()
+                .FirstOrDefault(r => r!.Value.Name == name)?.RowId
+             ?? fallback;
+        }
+        catch
+        {
+            return fallback;
+        }
+    }
 
-    private static readonly uint PerceptionIdx =
-        Dalamud.GameData.GetExcelSheet<BaseParam>(ClientLanguage.English).Cast<BaseParam?>()
-            .FirstOrDefault(r => r!.Value.Name == "Perception")?.RowId
-     ?? 73;
+    private static readonly uint GatheringIdx  = FindBaseParam("Gathering",  72);
+    private static readonly uint PerceptionIdx = FindBaseParam("Perception", 73);
 
     private static int GetContentHash(ulong id)
     {

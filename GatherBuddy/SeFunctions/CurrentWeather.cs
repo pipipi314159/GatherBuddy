@@ -18,5 +18,5 @@ public sealed class CurrentWeather : SeAddressBase
     { }
 
     public unsafe byte Current
-        => *(byte*)Address;
+        => Address != System.IntPtr.Zero ? *(byte*)Address : (byte)0;
 }

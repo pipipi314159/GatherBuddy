@@ -19,7 +19,12 @@ public class SeFunctionBase<T> where T : Delegate
 
     public SeFunctionBase(ISigScanner sigScanner, string signature, int offset = 0)
     {
-        Address = sigScanner.ScanText(signature);
+        // TW: tolerate signatures that do not exist on the Taiwan client.
+        if (!sigScanner.TryScanText(signature, out Address))
+        {
+            Address = IntPtr.Zero;
+            GatherBuddy.Log.Error($"{GetType().Name}: signature not found on this client, feature disabled.");
+        }
         if (Address != IntPtr.Zero)
             Address += offset;
         var baseOffset = (ulong)Address.ToInt64() - (ulong)sigScanner.Module.BaseAddress.ToInt64();

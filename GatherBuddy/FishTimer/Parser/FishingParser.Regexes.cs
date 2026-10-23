@@ -22,7 +22,7 @@ public partial class FishingParser
                 ClientLanguage.German   => German.Value,
                 ClientLanguage.French   => French.Value,
                 ClientLanguage.Japanese => Japanese.Value,
-                _                       => throw new InvalidEnumArgumentException(),
+                _                       => TraditionalChinese.Value,
             };
         }
 
@@ -59,6 +59,14 @@ public partial class FishingParser
             AreaDiscovered = new Regex(@"釣り手帳に新しい釣り場「(?<FishingSpot>.+)」の情報を記録した！", RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.ExplicitCapture),
             Mooch          = new Regex(@"は釣り上げた.+を慎重に投げ込み、泳がせ釣りを試みた。",            RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.ExplicitCapture),
             Undiscovered   = "未知の釣り場",
+        });
+        // TW: Traditional Chinese client messages. Cast / AreaDiscovered / Undiscovered verified in game; Mooch unverified.
+        private static readonly Lazy<Regexes> TraditionalChinese = new(() => new Regexes
+        {
+            Cast           = new Regex(@".*?在(?<FishingSpot>.+?)甩出了魚線開始釣魚。",              RegexOptions.Compiled | RegexOptions.ExplicitCapture),
+            AreaDiscovered = new Regex(@"將新釣場「(?<FishingSpot>.+)」記錄到了釣魚筆記中",              RegexOptions.Compiled | RegexOptions.ExplicitCapture),
+            Mooch          = new Regex(@"以小釣大",                                                RegexOptions.Compiled | RegexOptions.ExplicitCapture),
+            Undiscovered   = "在未知釣場甩出了魚線",
         });
         // @formatter:on
     }

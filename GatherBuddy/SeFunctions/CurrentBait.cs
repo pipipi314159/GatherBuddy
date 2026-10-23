@@ -26,14 +26,15 @@ public sealed class CurrentBait : SeAddressBase
                     return cosmicManager->FishingBait;
             }
 
-            return *(uint*)Address;
+            return Address != System.IntPtr.Zero ? *(uint*)Address : 0u;
         }
     }
 
     private delegate byte ExecuteCommandDelegate(int id, int unk1, uint baitId, int unk2, int unk3);
 
-    [Signature("E8 ?? ?? ?? ?? 41 C6 04 24")]
-    private readonly ExecuteCommandDelegate _executeCommand = null!;
+    // TW: fallible so a missing signature only disables bait switching.
+    [Signature("E8 ?? ?? ?? ?? 41 C6 04 24", Fallibility = Fallibility.Fallible)]
+    private readonly ExecuteCommandDelegate? _executeCommand = null;
 
     public enum ChangeBaitReturn
     {
@@ -57,6 +58,9 @@ public sealed class CurrentBait : SeAddressBase
 
         if (HasItem(baitId) <= 0)
             return ChangeBaitReturn.NotInInventory;
+
+        if (_executeCommand == null)
+            return ChangeBaitReturn.UnknownError;
 
         return _executeCommand(701, 4, baitId, 0, 0) == 1 ? ChangeBaitReturn.Success : ChangeBaitReturn.UnknownError;
     }
